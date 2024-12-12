@@ -1,0 +1,23 @@
+services:
+  postgres:
+    container_name: SensorsDB
+    image: postgres
+    environment:
+      POSTGRES_DB: "sensors_db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "12345"
+    ports:
+      - "5432:5432"
+  app:
+    container_name: SensorsApp
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://SensorsDB:5432/sensors_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345
